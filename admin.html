@@ -21,6 +21,7 @@
             --success: #10b981;
             --danger: #ef4444;
             --danger-soft: #fef2f2;
+            --danger-border: #fecaca;
             --warning: #f59e0b;
             --bg: #f4f6fb;
             --bg-grad: radial-gradient(1200px 600px at 88% -15%, rgba(99, 102, 241, .08), transparent), radial-gradient(900px 500px at -8% 25%, rgba(139, 92, 246, .05), transparent);
@@ -59,6 +60,8 @@
             --sidebar-active: rgba(99, 102, 241, .25);
             --sidebar-hover: rgba(255, 255, 255, .04);
             --glass: rgba(15, 23, 42, .72);
+            --danger-soft: rgba(239, 68, 68, .16);
+            --danger-border: rgba(239, 68, 68, .3);
         }
         body {
             font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, sans-serif;
@@ -115,11 +118,11 @@
         }
         .btn-danger-soft {
             background: var(--danger-soft);
-            color: #dc2626;
-            border-color: #fecaca;
+            color: #ef4444;
+            border-color: var(--danger-border);
         }
         .btn-danger-soft:hover {
-            background: #fee2e2;
+            background: rgba(239, 68, 68, .22);
         }
         .btn-sm {
             padding: 5px 10px;
@@ -301,6 +304,15 @@
             background: rgba(255, 255, 255, .12);
             color: #fff;
         }
+        .sidebar-footer .f-row button.btn-danger-soft {
+            background: rgba(239, 68, 68, .12);
+            color: #f87171;
+            border-color: rgba(239, 68, 68, .2);
+        }
+        .sidebar-footer .f-row button.btn-danger-soft:hover {
+            background: rgba(239, 68, 68, .24);
+            color: #fff;
+        }
 
         /* ===== 主区域 ===== */
         .main {
@@ -456,8 +468,8 @@
             opacity: 1;
         }
         .website-card.dragging {
-            opacity: .4;
-            transform: scale(.97);
+            opacity: .35;
+            transform: scale(.96);
         }
         .card-favicon {
             width: 42px;
@@ -470,10 +482,12 @@
             font-size: 18px;
             border: 1px solid var(--border);
             flex-shrink: 0;
+            overflow: hidden;
         }
         .card-favicon img {
-            width: 22px;
-            height: 22px;
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
         }
         .card-title {
             font-size: .9rem;
@@ -482,6 +496,7 @@
             line-height: 1.3;
             display: -webkit-box;
             -webkit-line-clamp: 2;
+            line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
@@ -498,6 +513,7 @@
             line-height: 1.4;
             display: -webkit-box;
             -webkit-line-clamp: 2;
+            line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
             min-height: 0;
@@ -699,34 +715,13 @@
             pointer-events: auto;
             border: 1px solid var(--border);
         }
-        .toast.success {
-            border-left-color: var(--success);
-        }
-        .toast.error {
-            border-left-color: var(--danger);
-        }
-        .toast.warning {
-            border-left-color: var(--warning);
-        }
+        .toast.success { border-left-color: var(--success); }
+        .toast.error { border-left-color: var(--danger); }
+        .toast.warning { border-left-color: var(--warning); }
+
         @keyframes slideIn {
-            from {
-                transform: translateX(40px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-        @keyframes fadeInUp {
-            from {
-                transform: translateY(12px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            from { transform: translateX(40px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
 
         /* ===== 滚动条美化 ===== */
@@ -744,13 +739,6 @@
         }
         ::-webkit-scrollbar-thumb:hover {
             background: var(--text-2);
-        }
-
-        /* ===== 拖拽指示 ===== */
-        .drag-indicator {
-            outline: 2px solid var(--primary);
-            outline-offset: -2px;
-            border-radius: var(--radius);
         }
 
         /* ===== 响应式 ===== */
@@ -785,6 +773,9 @@
             }
             .category-item .count {
                 display: none;
+            }
+            .category-item .move-btn {
+                opacity: .7;
             }
             .topbar {
                 padding: 10px 14px;
@@ -831,26 +822,23 @@
                     <small>SHUOCE ADMIN</small>
                 </div>
             </div>
-<!---->
+
             <button id="addCategorySidebarBtn" class="btn-primary btn-block" style="padding:10px;font-size:.86rem">＋ 新建分类</button>
-<!---->
+
             <div class="sidebar-title">分类列表 · <span id="categoryCount">0</span></div>
             <div id="categoryList" class="category-list"></div>
-<!---->
+
             <div class="sidebar-footer">
                 <div class="f-row">
                     <button id="editCategorySidebarBtn" title="编辑当前分类">✏️ 编辑</button>
-                    <button id="deleteCategorySidebarBtn" class="danger" title="删除当前分类">🗑️ 删除</button>
+                    <button id="deleteCategorySidebarBtn" class="btn-danger-soft" title="删除当前分类">🗑️ 删除</button>
                 </div>
                 <div class="f-row">
                     <button id="restoreBackupBtn" title="从本地备份恢复">📦 恢复</button>
                     <button id="backupNowBtn" title="备份当前数据到本地">💾 备份</button>
                 </div>
             </div>
-        
-</aside>
-
-
+        </aside>
 
         <!-- 主区域 -->
         <main class="main">
@@ -863,12 +851,12 @@
                     <button id="importBtn" class="btn-outline btn-sm"><span>📥</span> 导入</button>
                     <button id="exportBtn" class="btn-outline btn-sm"><span>📤</span> 导出</button>
                     <button id="themeToggleBtn" class="icon-btn btn-outline" title="切换主题">🌙</button>
-                    <button id="clearTokenBtn" class="btn-outline btn-sm" title="清除已保存的管理密码">🔑 清除Token</button>
+                    <button id="clearTokenBtn" class="btn-outline btn-sm" title="点击管理或输入访问密码">🔑 Token</button>
                     <button id="saveBtn" class="btn-primary btn-sm">💾 保存修改</button>
                 </div>
                 <input type="file" id="importFile" accept=".json" hidden>
             </header>
-<!---->
+
             <div class="content">
                 <div class="page-header">
                     <div>
@@ -880,9 +868,9 @@
                         <button id="batchDeleteBtn" class="btn-danger-soft btn-sm" style="display:none">🗑️ 批量删除</button>
                     </div>
                 </div>
-<!---->
+
                 <div id="websiteGrid" class="website-grid"></div>
-<!---->
+
                 <div class="quick-add">
                     <h3>➕ 快速添加网站</h3>
                     <div class="quick-form">
@@ -892,10 +880,7 @@
                     </div>
                 </div>
             </div>
-        
-</main>
-
-
+        </main>
     </div>
 
     <!-- 编辑网站弹窗 -->
@@ -932,12 +917,12 @@
     <div id="authModal" class="modal-overlay">
         <div class="modal">
             <h3>🔑 管理员验证</h3>
-            <p class="modal-hint">输入管理员密码后读取当前导航配置</p>
+            <p class="modal-hint">输入管理员密码后读取并管理导航配置</p>
             <label for="authToken">ADMIN_TOKEN</label>
             <input id="authToken" type="password" placeholder="请输入管理员密码" autocomplete="current-password">
             <div class="btn-row">
                 <button id="cancelAuth" class="btn-outline">取消</button>
-                <button id="confirmAuth" class="btn-primary">读取导航</button>
+                <button id="confirmAuth" class="btn-primary">确认载入</button>
             </div>
         </div>
     </div>
@@ -975,16 +960,16 @@
                 data: null,
                 currentCategoryId: null,
                 token: sessionStorage.getItem(STORAGE_KEY) || '',
-                editingWebsiteIndex: -1,
+                editingCardId: null,
                 editingCategoryId: null,
                 selectedWebsites: new Set(),
                 searchQuery: '',
                 isDirty: false,
-                dragSource: null, // 拖拽源元素
+                dragSource: null,
                 currentTheme: localStorage.getItem(THEME_KEY) || 'light'
             };
 
-            // ====== DOM引用 ======
+            // ====== DOM 引用 ======
             const $ = id => document.getElementById(id);
             const dom = {
                 categoryList: $('categoryList'),
@@ -1038,7 +1023,7 @@
                 const icon = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
                 el.innerHTML = `<span>${icon[type] || icon.info}</span><span>${message}</span>`;
                 $('toast-container').appendChild(el);
-                requestAnimationFrame(() => { el.style.animation = 'slideIn .3s cubic-bezier(.4,0,.2,1)' });
+                requestAnimationFrame(() => { el.style.animation = 'slideIn .3s cubic-bezier(.4,0,.2,1)'; });
                 setTimeout(() => {
                     el.style.transition = 'opacity .4s, transform .4s';
                     el.style.opacity = '0';
@@ -1052,17 +1037,24 @@
                 return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); };
             };
 
-            const escapeHtml = s => String(s || '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"':
-                    '&quot;', "'": '&#39;' }[m]));
+            const escapeHtml = s => String(s || '').replace(/[&<>"']/g, m => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[m]));
 
             const slugify = s => s.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || ('cat-' + Date.now());
 
+            // 改用 DuckDuckGo + 代理，解决 Google 国内被阻断的问题
             const getFavicon = url => {
-                try { return `https://www.google.com/s2/favicons?domain=${new URL(normalizeUrl(url)).hostname}&sz=32`; } catch { return null; }
+                try {
+                    const host = new URL(normalizeUrl(url)).hostname;
+                    return `https://proxyd.picpi.top/https://icons.duckduckgo.com/ip3/${encodeURIComponent(host)}.ico`;
+                } catch {
+                    return null;
+                }
             };
 
             function normalizeUrl(url) {
-                url = url.trim();
+                url = String(url || '').trim();
                 if (!url) return '';
                 if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
                 return url;
@@ -1082,8 +1074,20 @@
             }
 
             function beforeUnload(e) {
-                if (state.isDirty) { e.preventDefault();
-                    e.returnValue = ''; }
+                if (state.isDirty) {
+                    e.preventDefault();
+                    e.returnValue = '';
+                }
+            }
+
+            function updateTokenButtonState() {
+                if (state.token) {
+                    dom.clearTokenBtn.textContent = '🔑 Token已存';
+                    dom.clearTokenBtn.title = '密码已保存在本会话，点击管理或清除';
+                } else {
+                    dom.clearTokenBtn.textContent = '🔑 输入密码';
+                    dom.clearTokenBtn.title = '未输入密码，点击输入Token';
+                }
             }
 
             // ====== 本地备份 ======
@@ -1091,7 +1095,7 @@
                 if (!state.data) return;
                 try {
                     localStorage.setItem(BACKUP_KEY, JSON.stringify({ data: state.data, time: Date.now() }));
-                } catch (e) { /* 忽略 */ }
+                } catch (e) { /* 忽略 quota 异常 */ }
             }
 
             function restoreFromLocal() {
@@ -1155,6 +1159,7 @@
                     el.className = `category-item${cat.id === state.currentCategoryId ? ' active' : ''}`;
                     el.draggable = true;
                     el.dataset.index = i;
+                    el.dataset.id = cat.id; // 【关键修复】：设置 dataset.id，确保拖拽可识别
 
                     const name = document.createElement('span');
                     name.className = 'name';
@@ -1168,15 +1173,19 @@
                     upBtn.className = 'move-btn';
                     upBtn.textContent = '▲';
                     upBtn.title = '上移';
-                    upBtn.addEventListener('click', e => { e.stopPropagation();
-                        moveCategory(i, -1); });
+                    upBtn.addEventListener('click', e => {
+                        e.stopPropagation();
+                        moveCategory(i, -1);
+                    });
 
                     const downBtn = document.createElement('button');
                     downBtn.className = 'move-btn';
                     downBtn.textContent = '▼';
                     downBtn.title = '下移';
-                    downBtn.addEventListener('click', e => { e.stopPropagation();
-                        moveCategory(i, 1); });
+                    downBtn.addEventListener('click', e => {
+                        e.stopPropagation();
+                        moveCategory(i, 1);
+                    });
 
                     el.appendChild(name);
                     el.appendChild(count);
@@ -1194,7 +1203,6 @@
                     dom.categoryList.appendChild(el);
                 });
 
-                // 绑定分类拖拽
                 bindCategoryDrag();
                 if (!state.currentCategoryId && cats.length) state.currentCategoryId = cats[0].id;
             }
@@ -1206,8 +1214,7 @@
                         state.dragSource = el;
                         el.classList.add('dragging');
                         e.dataTransfer.effectAllowed = 'move';
-                        e.dataTransfer.setData('text/plain', el.dataset.index);
-                        try { e.dataTransfer.setDragImage(el, 10, 10); } catch {}
+                        e.dataTransfer.setData('text/plain', el.dataset.id);
                     });
 
                     el.addEventListener('dragover', e => {
@@ -1217,8 +1224,10 @@
                         if (!target || target === state.dragSource) return;
                         const rect = target.getBoundingClientRect();
                         const after = e.clientY > rect.top + rect.height / 2;
-                        dom.categoryList.querySelectorAll('.category-item').forEach(c => c.style.borderTop = '');
-                        dom.categoryList.querySelectorAll('.category-item').forEach(c => c.style.borderBottom = '');
+                        dom.categoryList.querySelectorAll('.category-item').forEach(c => {
+                            c.style.borderTop = '';
+                            c.style.borderBottom = '';
+                        });
                         if (after) target.style.borderBottom = '2px solid var(--primary)';
                         else target.style.borderTop = '2px solid var(--primary)';
                     });
@@ -1233,16 +1242,21 @@
                         e.stopPropagation();
                         const target = e.target.closest('.category-item');
                         if (!target || !state.dragSource || target === state.dragSource) return;
-                        const cats = state.data.categories;
+                        const cats = state.data?.categories;
+                        if (!cats) return;
+
                         const fromIndex = cats.findIndex(c => c.id === state.dragSource.dataset.id);
                         const toIndex = cats.findIndex(c => c.id === target.dataset.id);
                         if (fromIndex < 0 || toIndex < 0) return;
+
                         const rect = target.getBoundingClientRect();
                         const after = e.clientY > rect.top + rect.height / 2;
                         let insertIndex = toIndex;
                         if (after) insertIndex = toIndex + 1;
+
                         const [moved] = cats.splice(fromIndex, 1);
-                        cats.splice(insertIndex, 0, moved);
+                        cats.splice(insertIndex > fromIndex ? insertIndex - 1 : insertIndex, 0, moved);
+
                         renderCategories();
                         markDirty();
                         toast('分类顺序已更新', 'success');
@@ -1281,7 +1295,7 @@
                 if (!state.data) {
                     dom.currentCategoryTitle.textContent = '请先读取导航';
                     dom.currentCategoryMeta.textContent = '';
-                    return showEmpty('🔐', '请先点击「读取导航」加载数据');
+                    return showEmpty('🔐', '请先点击右上角「Token」输入密码并载入数据');
                 }
                 if (!cat) {
                     dom.currentCategoryTitle.textContent = '请选择分类';
@@ -1320,7 +1334,7 @@
 
                     el.innerHTML = `
                         <div class="check">✓</div>
-                        <div class="card-favicon">${favicon ? `<img src="${favicon}" onerror="this.remove()">` : '🌐'}</div>
+                        <div class="card-favicon">${favicon ? `<img src="${favicon}" onerror="this.parentElement.innerHTML='🌐'">` : '🌐'}</div>
                         <div class="card-title">${escapeHtml(card.title || '未命名')}</div>
                         <div class="card-url" title="${escapeHtml(card.url || '')}">${escapeHtml(card.url || '无地址')}</div>
                         ${card.description ? `<div class="card-desc">${escapeHtml(card.description)}</div>` : ''}
@@ -1346,17 +1360,20 @@
                     });
 
                     el.addEventListener('click', e => {
-                        const action = e.target.closest('[data-action]')?.dataset.action;
-                        if (action === 'move-up') { e.stopPropagation();
-                            moveWebsite(card, -1); } else if (action === 'move-down') { e.stopPropagation();
-                            moveWebsite(card, 1); } else if (action === 'edit') { e.stopPropagation();
-                            openWebsiteModal(card); } else if (action === 'delete') { e.stopPropagation();
-                            deleteWebsite(card); } else if (action === 'copy') { e.stopPropagation();
-                            copyLink(card.url); } else if (action === 'visit') { e.stopPropagation();
-                            card.url && window.open(card.url, '_blank'); } else if (e.target === el || e.target.closest('.card-favicon') || e.target
-                            .closest('.card-title')) {
-                            card.url && window.open(card.url, '_blank');
+                        const actionBtn = e.target.closest('[data-action]');
+                        if (actionBtn) {
+                            e.stopPropagation();
+                            const action = actionBtn.dataset.action;
+                            if (action === 'move-up') moveWebsite(card, -1);
+                            else if (action === 'move-down') moveWebsite(card, 1);
+                            else if (action === 'edit') openWebsiteModal(card);
+                            else if (action === 'delete') deleteWebsite(card);
+                            else if (action === 'copy') copyLink(card.url);
+                            else if (action === 'visit') card.url && window.open(card.url, '_blank');
+                            return;
                         }
+                        if (e.target.closest('.check')) return;
+                        if (card.url) window.open(card.url, '_blank');
                     });
 
                     dom.websiteGrid.appendChild(el);
@@ -1394,12 +1411,10 @@
                         const target = e.target.closest('.website-card');
                         if (!target || target === state.dragSource) return;
                         const rect = target.getBoundingClientRect();
-                        const afterX = e.clientX > rect.left + rect.width / 2;
-                        const afterY = e.clientY > rect.top + rect.height / 2;
-                        // 在网格中，水平和垂直都考虑
-                        const after = afterX && afterY;
-                        // 简单起见，实时移动DOM
-                        if (after) {
+                        const isAfter = (e.clientY > rect.top + rect.height / 2) ||
+                            (Math.abs(e.clientY - (rect.top + rect.height / 2)) < rect.height * 0.35 && e.clientX > rect.left + rect.width / 2);
+
+                        if (isAfter) {
                             dom.websiteGrid.insertBefore(state.dragSource, target.nextSibling);
                         } else {
                             dom.websiteGrid.insertBefore(state.dragSource, target);
@@ -1408,23 +1423,25 @@
 
                     el.addEventListener('dragend', () => {
                         el.classList.remove('dragging');
-                        // 保存新顺序
                         const cat = getCurrentCategory();
                         if (!cat || !state.dragSource) return;
+
                         const cardElements = Array.from(dom.websiteGrid.querySelectorAll('.website-card'));
                         const keyToCard = new Map((cat.cards || []).map(c => [c.id || c.url || c.title, c]));
                         const newOrder = [];
+
                         cardElements.forEach(cardEl => {
                             const key = cardEl.dataset.cardKey;
                             const card = keyToCard.get(key);
                             if (card) newOrder.push(card);
                         });
-                        if (newOrder.length !== (cat.cards || []).length) return;
-                        cat.cards = newOrder;
+
+                        if (newOrder.length === (cat.cards || []).length) {
+                            cat.cards = newOrder;
+                            markDirty();
+                            toast('网站顺序已更新', 'success');
+                        }
                         state.dragSource = null;
-                        // 不重新渲染，保持DOM顺序
-                        markDirty();
-                        toast('网站顺序已更新', 'success');
                     });
                 });
             }
@@ -1436,7 +1453,6 @@
                     await navigator.clipboard.writeText(url);
                     toast('链接已复制到剪贴板', 'success');
                 } catch {
-                    // 降级方案
                     const ta = document.createElement('textarea');
                     ta.value = url;
                     document.body.appendChild(ta);
@@ -1452,18 +1468,20 @@
                 let title = dom.newTitle.value.trim();
                 let url = dom.newUrl.value.trim();
                 const cat = getCurrentCategory();
-                if (!cat) return toast('请先在左侧创建分类', 'warning');
-                if (!title) {
-                    // 尝试从URL提取标题
-                    try {
-                        title = new URL(normalizeUrl(url)).hostname.replace(/^www\./, '');
-                    } catch { return toast('请输入网站名称', 'warning'); }
-                }
+                if (!cat) return toast('请先在左侧选择或创建分类', 'warning');
                 if (!url) return toast('请输入网址', 'warning');
+
                 url = normalizeUrl(url);
                 if (!/^https?:\/\//i.test(url)) return toast('网址格式不正确', 'warning');
 
-                // 去重检测
+                if (!title) {
+                    try {
+                        title = new URL(url).hostname.replace(/^www\./, '');
+                    } catch {
+                        return toast('请输入网站名称', 'warning');
+                    }
+                }
+
                 if ((cat.cards || []).some(c => normalizeUrl(c.url) === url)) return toast('该网址已存在', 'warning');
 
                 cat.cards = cat.cards || [];
@@ -1473,10 +1491,12 @@
                     title,
                     description: '',
                     url,
-                    id: 'card-' + Date.now()
+                    id: 'card-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6)
                 });
+
                 dom.newTitle.value = '';
                 dom.newUrl.value = '';
+                renderCategories(); // 同步更新侧边栏数量徽标
                 renderWebsiteGrid();
                 markDirty();
                 toast('网站已添加', 'success');
@@ -1489,6 +1509,7 @@
                 if (!confirm(`确定删除「${card.title}」吗？`)) return;
                 cat.cards = (cat.cards || []).filter(c => c !== card);
                 state.selectedWebsites.delete(card.id || card.url || card.title);
+                renderCategories();
                 renderWebsiteGrid();
                 updateBatchButtons();
                 markDirty();
@@ -1496,11 +1517,12 @@
             }
 
             function addCategory() {
-                if (!state.data) return toast('请先读取导航', 'warning');
+                if (!state.data) return showAuthModal();
                 const name = prompt('请输入新分类名称');
                 if (!name?.trim()) return;
                 const id = slugify(name);
                 if (state.data.categories.some(c => c.id === id)) return toast('该分类已存在', 'warning');
+
                 state.data.categories.push({ id, title: name.trim(), cards: [] });
                 state.currentCategoryId = id;
                 renderCategories();
@@ -1517,20 +1539,22 @@
                 dom.editTitle.value = card.title || '';
                 dom.editUrl.value = card.url || '';
                 dom.editDesc.value = card.description || '';
-                state.editingWebsiteIndex = (getCurrentCategory()?.cards || []).indexOf(card);
+                state.editingCardId = card.id || card.url || card.title;
                 openModal(dom.websiteModal);
                 setTimeout(() => dom.editTitle.focus(), 100);
             }
 
             function saveWebsiteModal() {
                 const cat = getCurrentCategory();
-                const card = cat?.cards?.[state.editingWebsiteIndex];
+                const card = cat?.cards?.find(c => (c.id || c.url || c.title) === state.editingCardId);
                 if (!card) return closeModal(dom.websiteModal);
+
                 const title = dom.editTitle.value.trim();
                 const url = normalizeUrl(dom.editUrl.value);
                 if (!title) return toast('请输入网站名称', 'warning');
                 if (!url || !/^https?:\/\//i.test(url)) return toast('网址格式不正确', 'warning');
                 if ((cat.cards || []).some(c => c !== card && normalizeUrl(c.url) === url)) return toast('该网址已存在', 'warning');
+
                 card.title = title;
                 card.url = url;
                 card.description = dom.editDesc.value.trim();
@@ -1555,6 +1579,7 @@
                 const title = dom.editCatTitle.value.trim();
                 if (!title) return toast('请输入分类名称', 'warning');
                 if (state.data.categories.some(c => c.id !== cat.id && c.title === title)) return toast('已存在同名分类', 'warning');
+
                 cat.title = title;
                 closeModal(dom.categoryModal);
                 renderCategories();
@@ -1568,8 +1593,9 @@
                 if (!cat) return toast('请选择分类', 'warning');
                 const n = (cat.cards || []).length;
                 if (!confirm(`确定删除「${cat.title}」吗？${n ? `\n其下 ${n} 个网站将一并删除！` : ''}`)) return;
+
                 state.data.categories = state.data.categories.filter(c => c.id !== cat.id);
-                state.currentCategoryId = null;
+                state.currentCategoryId = state.data.categories?.[0]?.id || null;
                 renderCategories();
                 renderWebsiteGrid();
                 markDirty();
@@ -1581,7 +1607,6 @@
                 const n = state.selectedWebsites.size;
                 if (!n) return toast('请先选择网站', 'warning');
                 dom.moveCount.textContent = n;
-                // 填充目标分类
                 dom.moveTargetCategory.innerHTML = '<option value="">请选择目标分类…</option>';
                 (state.data?.categories || []).forEach(cat => {
                     if (cat.id === state.currentCategoryId) return;
@@ -1619,28 +1644,35 @@
 
             // ====== API ======
             function showAuthModal() {
-                if (state.token) readNavigation(state.token).catch(() => openModal(dom.authModal));
-                else { openModal(dom.authModal);
-                    setTimeout(() => dom.authToken.focus(), 100); }
+                dom.authToken.value = state.token || '';
+                openModal(dom.authModal);
+                setTimeout(() => dom.authToken.focus(), 100);
             }
 
             async function readNavigation(token) {
                 try {
-                    toast('正在读取导航…', 'info', 800);
+                    toast('正在读取导航配置…', 'info', 1000);
+                    const headers = { 'Accept': 'application/json' };
+                    if (token) headers['Authorization'] = `Bearer ${token}`;
+
                     const res = await fetch(`${API_BASE}/api/navigation?t=${Date.now()}`, {
                         method: 'GET',
-                        headers: { 'Accept': 'application/json' },
+                        headers,
                         cache: 'no-store'
                     });
+
                     const text = await res.text();
                     let data;
-                    try { data = JSON.parse(text); } catch { throw new Error(`接口未返回 JSON (HTTP ${res.status})`); }
+                    try { data = JSON.parse(text); } catch { throw new Error(`接口未返回有效JSON (HTTP ${res.status})`); }
                     if (!res.ok) throw new Error(data.error || data.message || `HTTP ${res.status}`);
                     if (!data?.categories) throw new Error('数据格式错误');
 
                     state.data = data;
-                    state.token = token;
-                    sessionStorage.setItem(STORAGE_KEY, token);
+                    if (token) {
+                        state.token = token;
+                        sessionStorage.setItem(STORAGE_KEY, token);
+                    }
+                    updateTokenButtonState();
                     state.currentCategoryId = data.categories?.[0]?.id || null;
                     state.isDirty = false;
                     markClean();
@@ -1648,10 +1680,10 @@
                     backupToLocal();
                     renderCategories();
                     renderWebsiteGrid();
-                    toast('导航读取成功', 'success');
+                    toast('导航数据读取成功', 'success');
                 } catch (err) {
                     toast(`读取失败：${err.message}`, 'error', 5000);
-                    if (!state.data) openModal(dom.authModal);
+                    if (!state.data) showAuthModal();
                     throw err;
                 }
             }
@@ -1659,8 +1691,8 @@
             async function saveData() {
                 if (!state.data) return toast('请先读取导航', 'warning');
                 if (!state.token) {
-                    toast('身份验证已失效，请重新验证', 'warning');
-                    openModal(dom.authModal);
+                    toast('请先输入管理密码', 'warning');
+                    showAuthModal();
                     return;
                 }
 
@@ -1681,9 +1713,12 @@
                     if (!res.ok) throw new Error(result.error || result.message || `HTTP ${res.status}`);
                     markClean();
                     backupToLocal();
-                    toast('保存成功！所有修改已生效', 'success');
+                    toast('保存成功！修改已即时同步生效', 'success');
                 } catch (err) {
                     toast(`保存失败：${err.message}`, 'error', 5000);
+                    if (err.message.includes('401') || err.message.includes('Token')) {
+                        showAuthModal();
+                    }
                 } finally {
                     dom.saveBtn.disabled = false;
                     dom.saveBtn.textContent = '💾 保存修改';
@@ -1696,10 +1731,10 @@
                 const blob = new Blob([JSON.stringify(state.data, null, 2)], { type: 'application/json' });
                 const a = document.createElement('a');
                 a.href = URL.createObjectURL(blob);
-                a.download = `硕策导航-备份-${new Date().toISOString().slice(0, 10)}.json`;
+                a.download = `硕策导航-配置备份-${new Date().toISOString().slice(0, 10)}.json`;
                 a.click();
                 URL.revokeObjectURL(a.href);
-                toast('已导出 JSON 文件', 'success');
+                toast('已导出配置 JSON 文件', 'success');
             }
 
             function importData(file) {
@@ -1707,15 +1742,15 @@
                 reader.onload = e => {
                     try {
                         const data = JSON.parse(e.target.result);
-                        if (!data?.categories) throw new Error('结构不正确');
-                        if (!confirm('导入将覆盖当前数据，是否继续？')) return;
+                        if (!data?.categories) throw new Error('数据缺少 categories 数组');
+                        if (!confirm('导入将覆盖当前未保存的内容，是否继续？')) return;
                         state.data = data;
                         state.currentCategoryId = data.categories?.[0]?.id || null;
                         state.selectedWebsites.clear();
                         renderCategories();
                         renderWebsiteGrid();
                         markDirty();
-                        toast('导入成功，检查后点击保存', 'success');
+                        toast('导入成功，请核对后点击保存', 'success');
                     } catch (err) {
                         toast(`导入失败：${err.message}`, 'error');
                     }
@@ -1734,18 +1769,22 @@
                 dom.cancelAuth.addEventListener('click', () => closeModal(dom.authModal));
                 dom.authToken.addEventListener('keydown', e => { if (e.key === 'Enter') dom.confirmAuth.click(); });
 
-                // 网站
+                // 网站增删改
                 dom.addWebsiteBtn.addEventListener('click', addWebsite);
                 dom.newUrl.addEventListener('keydown', e => { if (e.key === 'Enter') addWebsite(); });
-                dom.newTitle.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault();
-                        dom.newUrl.focus(); } });
+                dom.newTitle.addEventListener('keydown', e => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        dom.newUrl.focus();
+                    }
+                });
 
-                // 分类
+                // 分类增删改
                 dom.addCategorySidebarBtn.addEventListener('click', addCategory);
                 dom.editCategorySidebarBtn.addEventListener('click', openCategoryModal);
                 dom.deleteCategorySidebarBtn.addEventListener('click', deleteCategory);
 
-                // 弹窗
+                // 弹窗表单保存
                 dom.saveWebsite.addEventListener('click', saveWebsiteModal);
                 dom.cancelWebsite.addEventListener('click', () => closeModal(dom.websiteModal));
                 dom.editUrl.addEventListener('keydown', e => { if (e.key === 'Enter') saveWebsiteModal(); });
@@ -1758,30 +1797,33 @@
                 dom.batchDeleteBtn.addEventListener('click', () => {
                     const cat = getCurrentCategory();
                     if (!cat || !state.selectedWebsites.size) return;
-                    if (!confirm(`确定删除选中的 ${state.selectedWebsites.size} 个网站？`)) return;
+                    if (!confirm(`确定批量删除选中的 ${state.selectedWebsites.size} 个网站？`)) return;
                     cat.cards = (cat.cards || []).filter(c => !state.selectedWebsites.has(c.id || c.url || c.title));
                     state.selectedWebsites.clear();
+                    renderCategories();
                     renderWebsiteGrid();
                     updateBatchButtons();
                     markDirty();
-                    toast('已删除选中网站', 'success');
+                    toast('已批量删除选中网站', 'success');
                 });
 
                 dom.batchMoveBtn.addEventListener('click', openMoveModal);
                 dom.confirmMove.addEventListener('click', confirmMoveWebsites);
                 dom.cancelMove.addEventListener('click', () => closeModal(dom.moveModal));
-                dom.moveTargetCategory.addEventListener('change', () => {
-                    if (dom.moveTargetCategory.value) {
-                        // 允许回车确认
-                    }
-                });
 
-                // 保存 / Token
+                // 保存 & Token 管理
                 dom.saveBtn.addEventListener('click', saveData);
                 dom.clearTokenBtn.addEventListener('click', () => {
-                    state.token = '';
-                    sessionStorage.removeItem(STORAGE_KEY);
-                    toast('已清除管理员密码，下次保存需重新验证', 'info');
+                    if (state.token) {
+                        if (confirm('是否清除已存密码？\n清除后下次保存时需要重新输入。')) {
+                            state.token = '';
+                            sessionStorage.removeItem(STORAGE_KEY);
+                            updateTokenButtonState();
+                            toast('密码已从当前会话清除', 'info');
+                        }
+                    } else {
+                        showAuthModal();
+                    }
                 });
 
                 // 导入导出
@@ -1792,15 +1834,15 @@
                 });
                 dom.exportBtn.addEventListener('click', exportData);
 
-                // 主题
+                // 主题切换
                 dom.themeToggleBtn.addEventListener('click', toggleTheme);
 
-                // 备份
+                // 本地备份
                 dom.restoreBackupBtn.addEventListener('click', restoreFromLocal);
                 dom.backupNowBtn.addEventListener('click', () => {
                     if (!state.data) return toast('没有可备份的数据', 'warning');
                     backupToLocal();
-                    toast('已备份到本地', 'success');
+                    toast('已备份到浏览器本地', 'success');
                 });
 
                 // 搜索
@@ -1809,6 +1851,7 @@
                     dom.clearSearchBtn.style.display = state.searchQuery ? 'inline-flex' : 'none';
                     renderWebsiteGrid();
                 }));
+
                 dom.clearSearchBtn.addEventListener('click', () => {
                     dom.searchInput.value = '';
                     state.searchQuery = '';
@@ -1837,38 +1880,30 @@
                         [dom.websiteModal, dom.categoryModal, dom.authModal, dom.moveModal].forEach(closeModal);
                     }
                 });
-
-                // 防止在弹窗输入时触发页面快捷键
-                document.querySelectorAll('input, select').forEach(el => {
-                    el.addEventListener('keydown', e => {
-                        if (e.key === 'Escape') e.stopPropagation();
-                    });
-                });
             }
 
             // ====== 初始化 ======
             function init() {
                 applyTheme();
                 bindEvents();
+                updateTokenButtonState();
                 renderCategories();
                 renderWebsiteGrid();
                 updateBatchButtons();
 
-                // 自动登录或弹窗
                 if (state.token) {
                     readNavigation(state.token).catch(() => showAuthModal());
                 } else {
-                    // 尝试从本地恢复（如果有）
                     const backup = localStorage.getItem(BACKUP_KEY);
                     if (backup) {
                         try {
                             const b = JSON.parse(backup);
-                            if (b.data?.categories && confirm('检测到本地备份数据，是否先载入？\n（也可以点击取消后输入密码在线读取）')) {
+                            if (b.data?.categories && confirm('检测到本地有自动备份的导航数据，是否先直接载入预览？\n（点击取消可输入密码从线上拉取）')) {
                                 state.data = b.data;
                                 state.currentCategoryId = b.data.categories?.[0]?.id || null;
                                 renderCategories();
                                 renderWebsiteGrid();
-                                toast('已载入本地备份', 'info');
+                                toast('已载入本地备份预览', 'info');
                                 return;
                             }
                         } catch {}
@@ -1877,7 +1912,6 @@
                 }
             }
 
-            // 启动
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', init);
             } else {
